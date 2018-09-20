@@ -1,0 +1,13 @@
+{
+    "printWidth": 100,
+    "parser": "flow",
+    "semi": false,
+    "overrides": [
+        {
+            "files": "*.test.js",
+            "options": {
+                "semi": true
+            }
+        }
+    ]
+}
