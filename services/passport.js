@@ -22,22 +22,21 @@ passport.deserializeUser((id, done) => {
 });
 
 //  instruct app how to use passport with the google strategy
-passport.use(new GoogleStrategy({
-    clientID: keys.googleClientID,
-    clientSecret: keys.googleClientSecret,
-    callbackURL: '/auth/google/callback',
-    proxy: true                             //  allow to run through proxy (heroku needs this to maintain a https://... (secure URL))
-}, (accessToken, refreshToken, profile, done) => {
-    
-    User.findOne({ googleID: profile.id })
-        .then((existingUser) => {
+passport.use(new GoogleStrategy
+    (
+        {
+            clientID: keys.googleClientID,
+            clientSecret: keys.googleClientSecret,
+            callbackURL: '/auth/google/callback',
+            proxy: true                             //  allow to run through proxy (heroku needs this to maintain a https://... (secure URL))
+        }, 
+        async (accessToken, refreshToken, profile, done) => {
+        const existingUser = await User.findOne({ googleID: profile.id })
             if ( existingUser ) {
-                //  we already have the user -- do nothing
-                done(null, existingUser);
-            } else {
-                //  no user -- create a new user
-                new User({ googleID: profile.id, displayName: profile.displayName }).save()
-                .then(user => done(null, user));
+                return done(null, existingUser);
             }
-        });
-}));
+            const user = await new User({ googleID: profile.id, displayName: profile.displayName }).save()
+            done(null, user);
+        }
+    )
+);
