@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 //  Local modules
 const keys = require('./config/keys');
@@ -19,7 +20,9 @@ mongoose.connect(keys.mongoURI);
 //  set up app object   
 const app = express();
 
-//  middleware
+//  middleware calls (app.use)
+//  unconditional, these are always called
+app.use(bodyParser.json());
 app.use(
     cookieSession({
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -31,6 +34,7 @@ app.use(passport.session());
 
 //  routing
 require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
 
 //  express tells node to listen for activity on a specific port
 const PORT = process.env.PORT || 5000;
