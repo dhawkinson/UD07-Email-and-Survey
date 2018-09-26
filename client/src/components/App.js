@@ -1,4 +1,10 @@
 //  home of the react functionality, rendering layer control & react router
+//  NOTE to self:
+//      MODULE NAMING CONVENTION
+//      when exporting a single function or code snippet
+//          we begin the name with a lower case letter
+//      when exporting a Class or any kind
+//          we begin the name with an Upper Case Letter
 
 //  library modules
 import React, { Component } from 'react';
